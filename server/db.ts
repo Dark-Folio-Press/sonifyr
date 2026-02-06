@@ -3,34 +3,59 @@ import { drizzle } from 'drizzle-orm/neon-serverless';
 import { sql } from 'drizzle-orm';
 import ws from "ws";
 import * as schema from "@shared/schema";
+import process from "process";
 
-neonConfig.webSocketConstructor = ws;
+const dbMode = process.env.DB_MODE ?? "sqlite";
 
-if (!process.env.DATABASE_URL) {
-  throw new Error(
-    "DATABASE_URL must be set. Did you forget to provision a database?",
-  );
+let db: any;
+
+/* ─────────────────────────────
+   SQLITE (local dev / contributors)
+   ───────────────────────────── */
+if (dbMode === "sqlite") {
+  console.log("🟢 Using SQLite (local dev mode)");
+
+  const { drizzle } = await import("drizzle-orm/better-sqlite3");
+  const Database = (await import("better-sqlite3")).default;
+
+  const sqlite = new Database("sonifyr.dev.db");
+
+  db = drizzle(sqlite, { schema });
+
 }
 
-export const pool = new Pool({ connectionString: process.env.DATABASE_URL });
-export const db = drizzle({ client: pool, schema });
+/* ─────────────────────────────
+   POSTGRES (Neon / production)
+   ───────────────────────────── */
+else {
+  console.log("🟣 Using Postgres (Neon)");
 
-// Create guest rate limits table if it doesn't exist (startup DDL guard)
-const initializeGuestRateLimitsTable = async () => {
-  try {
-    await db.execute(sql`
-      CREATE TABLE IF NOT EXISTS guest_rate_limits (
-        id serial PRIMARY KEY,
-        email varchar NOT NULL UNIQUE,
-        last_playlist_generated timestamp,
-        created_at timestamp DEFAULT now() NOT NULL,
-        updated_at timestamp DEFAULT now() NOT NULL
-      )
-    `);
-  } catch (error) {
-    console.error('Failed to create guest_rate_limits table:', error);
+  if (!process.env.DATABASE_URL) {
+    throw new Error("DATABASE_URL must be set for postgres mode");
   }
-};
 
-// Initialize table on startup
-initializeGuestRateLimitsTable();
+  const ws = (await import("ws")).default;
+  const { Pool, neonConfig } = await import("@neondatabase/serverless");
+  const { drizzle } = await import("drizzle-orm/neon-serverless");
+
+  neonConfig.webSocketConstructor = ws;
+
+  const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+
+  db = drizzle({ client: pool, schema });
+
+  // Postgres-only startup DDL
+  await db.execute(sql`
+    CREATE TABLE IF NOT EXISTS guest_rate_limits (
+      id serial PRIMARY KEY,
+      email varchar NOT NULL UNIQUE,
+      last_playlist_generated timestamp,
+      created_at timestamp DEFAULT now() NOT NULL,
+      updated_at timestamp DEFAULT now() NOT NULL
+    )
+  `);
+}
+
+/* ───────────────────────────── */
+
+export { db };
