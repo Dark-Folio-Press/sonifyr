@@ -40,22 +40,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json({ ...req.user, password: undefined });
   });
 
-  // Direct Google OAuth URL (bypasses any Replit interception)
-  app.get('/api/auth/google-direct', (req, res) => {
-    const domain = process.env.REPLIT_DOMAINS?.split(',')[0] || 'localhost:5000';
-    const callbackURL = domain.includes('localhost') 
-      ? `http://${domain}/api/auth/google/callback`
-      : `https://${domain}/api/auth/google/callback`;
-    
-    const googleClientId = process.env.GOOGLE_CLIENT_ID;
-    const redirectUri = encodeURIComponent(callbackURL);
-    const scope = encodeURIComponent('profile email');
-    
-    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?response_type=code&redirect_uri=${redirectUri}&scope=${scope}&client_id=${googleClientId}`;
-    
-    res.redirect(authUrl);
-  });
-
   // Complete user profile setup
   app.post("/api/auth/complete-profile", requireAuth, async (req, res) => {
     try {
