@@ -4,3 +4,18 @@ dist/
 build/
 .env
 backup.tar.gz
+# Cookies / session exports
+cookies.txt
+cookies*.txt
+
+# Environment & secrets
+.env
+.env.*
+*.secret.*
+*.key
+*.pem
+
+# Local auth / test artifacts
+auth.local.*
+test-auth.local.*
+
