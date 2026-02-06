@@ -12,7 +12,7 @@ if (DB_MODE === "sqlite") {
 
   const Database = (await import("better-sqlite3")).default;
   const { drizzle } = await import("drizzle-orm/better-sqlite3");
-  const schema = await import("@shared/schema/sqlite");
+  const schema = await import("../shared/schema/sqlite");
 
   const sqlite = new Database("sonifyr.dev.db");
 
@@ -32,7 +32,7 @@ else {
   const ws = (await import("ws")).default;
   const { Pool, neonConfig } = await import("@neondatabase/serverless");
   const { drizzle } = await import("drizzle-orm/neon-serverless");
-  const schema = await import("@shared/schema/postgres");
+  const schema = await import("../shared/schema/postgres");
 
   neonConfig.webSocketConstructor = ws;
 
