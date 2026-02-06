@@ -17,7 +17,7 @@ export default function SignupPage() {
             Join the Cosmic Journey
           </h1>
           <p className="mt-2 text-gray-600 dark:text-gray-400">
-            Connect with Spotify to unlock personalized astrology and music
+            Connect with Spotify to unlock personalized astrological insights and music
           </p>
         </div>
 
