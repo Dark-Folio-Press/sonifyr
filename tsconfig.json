@@ -15,6 +15,11 @@
     "moduleResolution": "bundler",
     "baseUrl": ".",
     "types": ["node", "vite/client"],
-   
+    "paths": {
+      "@shared/*": ["./shared/*"],
+      "@shared": ["./shared"],
+      "@/*": ["./client/src/*"],
+      "@assets/*": ["./attached_assets/*"]
+    }
   }
 }
