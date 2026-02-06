@@ -3,15 +3,12 @@ import {
   text,
   integer,
   serial,
-  boolean,
   timestamp,
   jsonb,
   index,
 } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
 import { relations } from "drizzle-orm";
-
-import * as domain from "./domain";
 
 export const users = pgTable("users", {
   id: text("id").primaryKey().notNull(),
