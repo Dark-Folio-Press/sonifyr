@@ -1,4 +1,4 @@
-import type { BirthInfo } from "@shared/schema";
+import type { BirthInfo } from "../../shared/schema/index.js";
 import { exec } from 'child_process';
 import { promisify } from 'util';
 

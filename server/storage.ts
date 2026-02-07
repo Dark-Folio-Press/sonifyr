@@ -38,7 +38,7 @@ import {
   type InsertWeeklyReflection,
   type UpsertUser,
   type InsertUser
-} from "@shared/schema";
+} from "../shared/schema/index.js";
 import { db } from "./db";
 import { eq, sql, and } from "drizzle-orm";
 

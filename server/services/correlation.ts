@@ -1,4 +1,4 @@
-import type { DailyMood, DailyTransit } from "@shared/schema";
+import type { DailyMood, DailyTransit } from "../../shared/schema/index.js";
 import { LunarService, type LunarData, type MoonPhaseCorrelation } from "./lunar";
 
 export interface MoodTransitCorrelation {

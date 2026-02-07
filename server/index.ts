@@ -1,4 +1,3 @@
-import "dotenv/config";
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
@@ -44,28 +43,28 @@ app.use((req, res, next) => {
   next();
 });
 
-/* ─────────────────────────────
-   Auth interceptors (OPTIONAL)
-   Only enabled if AUTH_ENABLED !== false
-   ───────────────────────────── */
-if (AUTH_ENABLED) {
-  app.all("/api/login*", (_req, res) => {
-    res.redirect(302, "/login");
-  });
+// Override any potential Replit Auth routes with highest priority
+app.all("/api/login*", (req, res) => {
+  console.log(`Intercepted ${req.method} ${req.url} from ${req.get('User-Agent')}, redirecting to /login`);
+  res.redirect(302, "/login");
+});
 
-  app.all("/api/logout*", (req, res) => {
-    req.session?.destroy?.(() => {});
-    res.redirect(302, "/");
-  });
+app.all("/api/logout*", (req, res) => {
+  console.log("Intercepted /api/logout request, redirecting to /");
+  req.session?.destroy?.(() => {});
+  res.redirect(302, "/");
+});
 
-  app.all("/api/callback*", (_req, res) => {
-    res.redirect(302, "/login");
-  });
+app.all("/api/callback*", (req, res) => {
+  console.log("Intercepted /api/callback request, redirecting to /login");
+  res.redirect(302, "/login");
+});
 
-  app.all("/auth/*", (_req, res) => {
-    res.redirect(302, "/login");
-  });
-}
+// Block all auth routes that could trigger Replit Auth
+app.all("/auth/*", (req, res) => {
+  console.log(`Intercepted ${req.method} ${req.url}, redirecting to /login`);
+  res.redirect(302, "/login");
+});
 
 /* ─────────────────────────────
    App bootstrap
