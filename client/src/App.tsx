@@ -64,10 +64,9 @@ function Router() {
         {/* User-dependent routes */}
         {user ? (
           <>
-            {/* Check if user needs to complete profile */}
             {!user?.birthDate || !user?.birthTime || !user?.birthLocation ? (
               <Route path="/">
-                <ProfileSetupPage />
+                <Landing />
               </Route>
             ) : (
               <>
