@@ -58,12 +58,15 @@ export class SpotifyService {
   constructor() {
     this.clientId = process.env.SPOTIFY_CLIENT_ID!;
     this.clientSecret = process.env.SPOTIFY_CLIENT_SECRET!;
-    const domain = process.env.REPLIT_DOMAINS?.split(',')[0];
-    this.redirectUri = `https://${domain || 'localhost:5000'}/api/spotify/callback`;
-    
-    console.log("Spotify Service initialized with redirect URI:", this.redirectUri);
-    
-    // Initialize service account for planetary frequency analysis
+    this.redirectUri = process.env.SPOTIFY_REDIRECT_URI!;
+
+    if (!this.redirectUri) {
+      throw new Error("SPOTIFY_REDIRECT_URI is not set");
+  }
+
+    console.log("🎧 Spotify OAuth redirect URI:", this.redirectUri);
+
+     // Initialize service account for planetary frequency analysis
     this.initializeServiceAccount();
   }
 
