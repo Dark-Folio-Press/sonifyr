@@ -16,7 +16,7 @@ import {
   sharedContent,
   socialInteractions,
   dailyMoods
-} from "../shared/schema/index.js";
+} from "@shared/schema";
 import { db } from "./db";
 import { eq, and } from "drizzle-orm";
 import { setupAuth, requireAuth, requireCompleteProfile } from "./auth";

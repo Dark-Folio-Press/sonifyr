@@ -21,9 +21,8 @@ export function setupAuth(app: Express) {
     tableName: "sessions",
   });
 
-  console.log("SESSION_SECRET value:", process.env.SESSION_SECRET);
   const sessionSettings: session.SessionOptions = {
-    secret: process.env.SESSION_SECRET || "fallback-secret",
+    secret: process.env.SESSION_SECRET!,
     resave: false,
     saveUninitialized: false,
     store: sessionStore,

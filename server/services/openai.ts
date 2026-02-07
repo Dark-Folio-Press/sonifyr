@@ -1,5 +1,5 @@
 import OpenAI from "openai";
-import type { BirthInfo, PlaylistData } from "../../shared/schema/index.js";
+import type { BirthInfo, PlaylistData } from "@shared/schema";
 import { AstrologyService } from "./astrology";
 import { spotifyService, type SpotifyTrack } from "./spotify";
 import { storage } from "../storage";

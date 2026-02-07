@@ -1,5 +1,5 @@
 import { nanoid } from 'nanoid';
-import { type SharedContent, type InsertSharedContent, type SocialInteraction, type InsertSocialInteraction } from '../../shared/schema/index.js';
+import { type SharedContent, type InsertSharedContent, type SocialInteraction, type InsertSocialInteraction } from '@shared/schema';
 
 export interface ShareablePlaylist {
   id: string;
