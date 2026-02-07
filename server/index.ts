@@ -85,13 +85,16 @@ if (AUTH_ENABLED) {
   /* ─────────────────────────────
      Start server (Codespaces-safe)
      ───────────────────────────── */
-  const port = Number(process.env.PORT);
-  if (!port) {
-    throw new Error("PORT environment variable not set");
-  }
+const port = Number(process.env.PORT) || 3000;
 
-  server.listen(
-    { port, host: "0.0.0.0", reusePort: true },
-    () => log(`serving on port ${port}`)
-  );
-})();
+server.listen(
+  {
+    port,
+    host: "0.0.0.0",
+    reusePort: true,
+  },
+  () => {
+    log(`serving on port ${port}`);
+  }
+);
+
