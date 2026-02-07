@@ -56,17 +56,17 @@ export class SpotifyService {
   private serviceTokenExpiry: number = 0;
 
   constructor() {
-    this.clientId = process.env.SPOTIFY_CLIENT_ID!;
-    this.clientSecret = process.env.SPOTIFY_CLIENT_SECRET!;
-    this.redirectUri = process.env.SPOTIFY_REDIRECT_URI!;
+    this.clientId = process.env.SPOTIFY_CLIENT_ID || "";
+    this.clientSecret = process.env.SPOTIFY_CLIENT_SECRET || "";
+    this.redirectUri = process.env.SPOTIFY_REDIRECT_URI || "";
 
-    if (!this.redirectUri) {
-      throw new Error("SPOTIFY_REDIRECT_URI is not set");
-  }
+    if (!this.redirectUri || !this.clientId || !this.clientSecret) {
+      console.warn("Spotify credentials not fully configured. Spotify features will be unavailable.");
+      return;
+    }
 
-    console.log("🎧 Spotify OAuth redirect URI:", this.redirectUri);
+    console.log("Spotify OAuth redirect URI:", this.redirectUri);
 
-     // Initialize service account for planetary frequency analysis
     this.initializeServiceAccount();
   }
 
