@@ -3,10 +3,6 @@ import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 
 const app = express();
-
-/* ─────────────────────────────
-   Config
-   ───────────────────────────── */
 const AUTH_ENABLED = process.env.AUTH_ENABLED !== "false";
 
 /* ─────────────────────────────
@@ -44,16 +40,14 @@ app.use((req, res, next) => {
 });
 
 /* ─────────────────────────────
-   Auth interceptors (ONLY if enabled)
+   Auth interceptors (optional)
    ───────────────────────────── */
 if (AUTH_ENABLED) {
   app.all("/api/login*", (_req, res) => res.redirect(302, "/login"));
-
   app.all("/api/logout*", (req, res) => {
     req.session?.destroy?.(() => {});
     res.redirect(302, "/");
   });
-
   app.all("/api/callback*", (_req, res) => res.redirect(302, "/login"));
   app.all("/auth/*", (_req, res) => res.redirect(302, "/login"));
 }
@@ -64,37 +58,30 @@ if (AUTH_ENABLED) {
 (async () => {
   const server = await registerRoutes(app);
 
-  /* ─────────────────────────────
-     Error handler
-     ───────────────────────────── */
+  /* Error handler */
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
     res
       .status(err.status || 500)
       .json({ message: err.message || "Internal Server Error" });
   });
 
-  /* ─────────────────────────────
-     Frontend handling
-     ───────────────────────────── */
+  /* Frontend */
   if (app.get("env") === "development") {
     await setupVite(app, server);
   } else {
     serveStatic(app);
   }
 
-  /* ─────────────────────────────
-     Start server (Codespaces-safe)
-     ───────────────────────────── */
-const port = Number(process.env.PORT) || 3000;
-
-server.listen(
-  {
-    port,
-    host: "0.0.0.0",
-    reusePort: true,
-  },
-  () => {
-    log(`serving on port ${port}`);
-  }
-);
-
+  /* Start server */
+  const port = Number(process.env.PORT) || 3000;
+  server.listen(
+    {
+      port,
+      host: "0.0.0.0",
+      reusePort: true,
+    },
+    () => {
+      log(`serving on port ${port}`);
+    }
+  );
+})();
