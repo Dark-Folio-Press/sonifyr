@@ -9,7 +9,7 @@ packages = ["chromium", "glib", "nss", "cairo", "pango", "atk", "cups", "zip"]
 [deployment]
 deploymentTarget = "autoscale"
 build = ["npm", "run", "build"]
-run = ["node", "./dist/index.cjs"]
+run = ["npm", "run", "start"]
 
 [[ports]]
 localPort = 5000
