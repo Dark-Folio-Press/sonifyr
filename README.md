@@ -1,11 +1,11 @@
 # Sonifyr - Astrological Music Curation
 
-Sonifyr creates personalized Spotify playlists based on your astrological profile, combining celestial insights with music recommendations.
+Sonifyr creates personalized Spotify playlists based on the weekly planetary transits across your birth chart, combining celestial insights with music recommendations.
 
 ## Authentication
 
 ### Spotify OAuth Only
-Sonifyr uses **Spotify-only authentication**. Traditional email/password login and other OAuth providers (Google, Discord) have been removed.
+Sonifyr uses **Spotify-only authentication**. 
 
 **Important Limitations:**
 - **Spotify Premium Required**: Due to Spotify's Development Mode restrictions, only Premium accounts can use this app
